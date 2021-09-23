@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Document } from "./features/document/Document";
+import { useQuery, gql } from "@apollo/client";
+import { GetDocumentsIDs } from './__generated__/GetDocumentsIDs';
+import { Search } from './Search/Search';
+import { GET_USERS_BY_NAME } from './features/user/User';
 
-function App() {
+const GET_DOCUMENT_IDS = gql`
+  query GetDocumentsIDs {
+    nomenclatureDocuments {
+      id
+    }
+  }
+`;
+
+export default function App() {
+  const { loading, error, data } = useQuery<GetDocumentsIDs>(GET_DOCUMENT_IDS);
+  if (loading) {
+    return <div>Грузим документы</div>;
+  }
+  if (error) {
+    return <div>Ошибка: {error.message}</div>;
+  }
+  const documents = (data as GetDocumentsIDs).nomenclatureDocuments.map(
+    (doc) => doc.id
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+        <div>
+          <label>Поиск по документам: </label><Search query={GET_USERS_BY_NAME} filterFieldName={'name'} dataLoadCallback={(data) => {
+            console.log(data);
+        }}/>
+        </div>
+        <ul>
+          {documents.map((docId: string) => {
+            return (
+                <li key={docId}>
+                  <Document documentId={docId} />
+                </li>
+            );
+          })}
+        </ul>
+      </div>
   );
 }
-
-export default App;
