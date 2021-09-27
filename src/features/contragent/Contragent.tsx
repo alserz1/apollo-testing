@@ -8,11 +8,15 @@ export const contragentFragment = gql`
     name
   }
 `;
+
 interface IProps {
   contragent: GetContragentFragment;
 }
 
 
+/**
+ * Этот контрол специально не грузит данные самостоятельно, чтобы показать, что так тоже работает)
+ */
 export const Contragent = memo(function Contragent(props: IProps) {
   return <span>{props.contragent.name}</span>;
 });

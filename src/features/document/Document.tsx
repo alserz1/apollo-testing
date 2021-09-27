@@ -32,6 +32,13 @@ const GET_DOCUMENT = gql`
     ${userFragment}
 `;
 
+/**
+ * Грузит данные для себя и всех детей, в детей отдаётся только id (кроме контрагента, он летит полностью,
+ * потому что я так захотел).
+ * Дети по id получают всё, что им надо. Если всё есть в кэше Apollo - запроса на БЛ не будет.
+ * @param props
+ * @constructor
+ */
 export function Document(props: { documentId: string }) {
     const { loading, error, data } = useQuery<
         GetDocument,

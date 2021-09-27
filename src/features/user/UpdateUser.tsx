@@ -21,6 +21,11 @@ interface IProps {
     initialName: UpdateUserMutation_updateUser['name'];
 }
 
+/**
+ * Этот контрол обновляет имя пользователя через запрос на сервер graphql
+ * @param props
+ * @constructor
+ */
 export function UpdateUser(props: IProps) {
     const [currentName, changeName] = useState(props.initialName);
     const [mutateFunction] = useMutation<
@@ -34,13 +39,6 @@ export function UpdateUser(props: IProps) {
                     variables: {
                         id: props.userId,
                         name: (e.target as HTMLInputElement).value
-                    },
-                    optimisticResponse: {
-                        updateUser: {
-                            __typename: 'User',
-                            id: props.userId,
-                            name: (e.target as HTMLInputElement).value
-                        }
                     }
                 });
             }

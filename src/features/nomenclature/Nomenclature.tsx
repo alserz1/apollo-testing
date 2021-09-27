@@ -18,9 +18,6 @@ const GET_NOMENCLATURE = gql`
     query GetNomenclatureQuery($id: ID!) {
         nomenclature(id: $id) {
             ...GetNomenclatureFragment
-            clientTest @client {
-                text
-            }
         }
     }
     ${nomenclatureFragment}
@@ -30,7 +27,18 @@ export interface IProps {
     nomenclatureId: GetNomenclatureQuery_nomenclature['id'];
 }
 
+/**
+ * Если данные есть в кэше - берёт из кэша. Если хоть одного поля там не окажется - пойдёт на БЛ за всеми.
+ * Взятие из кэша работает за счёт typePolicies, см. комменты к определению хука useTypePolicies.
+ */
 export const Nomenclature = memo(function Nomenclature(props: IProps) {
+    /**
+     * По сути здесь написано следующее:
+     * если в запросе к типу Query (корневой запрос) участвует поле nomenclature, сгенерируй и верни ссылку в кэш
+     * на элемент типа Nomenclature с переданным id.
+     *
+     * Apollo получит эту ссылку, поищет у себя такой объект, и если он есть - вернёт этот объект.
+     */
     useTypePolicies({
         Query: {
             fields: {
@@ -40,20 +48,6 @@ export const Nomenclature = memo(function Nomenclature(props: IProps) {
                             __typename: 'Nomenclature',
                             id: (args as GetNomenclatureQuery_nomenclature).id
                         });
-                    }
-                }
-            }
-        }
-    });
-    useTypePolicies({
-        Nomenclature: {
-            fields: {
-                clientTest: {
-                    read() {
-                        return {
-                            ignoredField: '456',
-                            text: '123'
-                        };
                     }
                 }
             }
@@ -77,5 +71,5 @@ export const Nomenclature = memo(function Nomenclature(props: IProps) {
         return <div>Не нашли номенклатуру с id: {props.nomenclatureId}</div>;
     }
     // @ts-ignore
-    return <div>{data.nomenclature.title}, клиентское поле: {data.nomenclature.clientTest.text}</div>;
+    return <div>{data.nomenclature.title}</div>;
 });

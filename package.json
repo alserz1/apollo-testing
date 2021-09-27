@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "3.0.0-rc.3",
-    "graphql": "15.1.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -12,6 +11,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "graphql": "15.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
@@ -23,7 +23,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "download-schema": "apollo service:download --endpoint=https://qys9u.sse.codesandbox.io/ graphql-schema.json",
-    "codegen": "npm run download-schema && apollo codegen:generate --localSchemaFile=graphql-schema.json --target=typescript --tagName=gql"
+    "download-schema-graphql": "apollo client:download-schema --endpoint=https://qys9u.sse.codesandbox.io/ schema.graphql",
+    "codegen": "npm run download-schema && npm run download-schema-graphql && apollo codegen:generate --localSchemaFile=graphql-schema.json,local-schema.graphql --target=typescript --tagName=gql",
+    "onlycodegen": "apollo codegen:generate --localSchemaFile=graphql-schema.json,local-schema.graphql --target=typescript --tagName=gql"
   },
   "eslintConfig": {
     "extends": [

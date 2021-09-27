@@ -1,0 +1,27 @@
+directive @wasabyBL(type: String!, endpoint: String!, method: String!) on FIELD
+directive @type(name: String!) on FIELD
+
+enum DocumentTypeEnum {
+    FIRST
+    SECOND
+    THIRD
+}
+
+type DocumentType {
+    title: String!
+    type: DocumentTypeEnum!
+}
+
+type EDORPDocument {
+    id: ID!
+    name: String!
+    documentType: DocumentType!
+}
+
+extend type Query {
+    rpDocument(id: ID!): EDORPDocument
+}
+
+extend type Mutation {
+    updateRPDocument(id: ID!, name: String!): EDORPDocument
+}

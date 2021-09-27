@@ -7,6 +7,11 @@ interface IProps {
     dataLoadCallback: (data: unknown) => void;
 }
 
+/**
+ * Просто эксперименты с поиском на сервере
+ * @param props
+ * @constructor
+ */
 export function Search(props: IProps) {
     const [loadData] = useLazyQuery(props.query, {
         onCompleted: props.dataLoadCallback,
